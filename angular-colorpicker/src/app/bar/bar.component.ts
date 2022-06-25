@@ -1,5 +1,8 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnInit,
@@ -17,9 +20,10 @@ export const BarTypes = {
   selector: 'app-bar',
   templateUrl: './bar.component.html',
   styleUrls: ['./bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarComponent {
-  //TODO: change on push?
+  constructor(private ref: ChangeDetectorRef) {}
 
   @Input() type = BarTypes.TRANSPARENT;
   get transparent(): boolean {
@@ -28,24 +32,22 @@ export class BarComponent {
   get hue(): boolean {
     return this.type == BarTypes.HUE;
   }
+
   @Output() move = new EventEmitter<PercentLocation>();
   markerMoved({ x, y }: PercentLocation) {
     this.markerX = x;
     this.markerY = y;
+    this.ref.markForCheck();
   }
 
-  backgroundColor(): string {
-    return `background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%)
-    50% / 20px 20px`;
-  }
   markerX = 0;
   markerY = 0;
 
   markerStyle() {
     const format = (num: number): string => Math.round(num * 100) + '%';
-
+    const amt = format(this.markerX);
     return {
-      left: format(this.markerX),
+      left: amt,
     };
   }
 }

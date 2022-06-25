@@ -9,6 +9,7 @@
   border-style: solid;
   box-sizing: border-box;
   transition: transform 0.1s ease-in-out;
+  transform: translateX(-50%);
 }
 
 .marker:hover {
