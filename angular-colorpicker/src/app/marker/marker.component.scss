@@ -1,0 +1,11 @@
+@import "../variables.scss";
+
+.marker {
+  height: $marker-size;
+  width: $marker-size;
+  border-radius: 100%;
+  border-color: white;
+  border-width: $marker-border-width;
+  border-style: solid;
+  box-sizing: content-box;
+}

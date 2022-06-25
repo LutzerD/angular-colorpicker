@@ -1,0 +1,8 @@
+<div class="bar">
+  <app-marker
+    appDraggable
+    (onMove)="markerMoved($event)"
+    class="marker"
+    [ngStyle]="markerStyle()"
+  ></app-marker>
+</div>

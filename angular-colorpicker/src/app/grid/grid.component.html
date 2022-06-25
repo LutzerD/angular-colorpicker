@@ -1,0 +1,10 @@
+<div class="grid">
+  <div class="background" [style.background-image]="xBackgroundStyle()"></div>
+  <div class="background" [style.background-image]="yBackgroundStyle()"></div>
+  <app-marker
+    appDraggable
+    (onMove)="markerMoved($event)"
+    class="marker"
+    [ngStyle]="markerStyle()"
+  ></app-marker>
+</div>

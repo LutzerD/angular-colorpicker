@@ -1,0 +1,7 @@
+@import "../variables.scss";
+
+.color-picker-container {
+  display: flex;
+  flex-direction: column;
+  width: $picker-width;
+}
