@@ -48,6 +48,7 @@ export class BarComponent {
     const amt = format(this.markerX);
     return {
       left: amt,
+      top: '50%',
     };
   }
 }

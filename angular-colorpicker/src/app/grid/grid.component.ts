@@ -28,7 +28,7 @@ export class GridComponent {
 
     return {
       left: format(this.markerX),
-      top: format(0.5),
+      top: format(this.markerY),
     };
   }
 }
