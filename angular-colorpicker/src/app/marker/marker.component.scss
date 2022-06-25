@@ -7,5 +7,14 @@
   border-color: white;
   border-width: $marker-border-width;
   border-style: solid;
-  box-sizing: content-box;
+  box-sizing: border-box;
+  transition: transform 0.1s ease-in-out;
+}
+
+.marker:hover {
+  cursor: pointer;
+}
+
+.marker.active {
+  transform: scale(1.1);
 }

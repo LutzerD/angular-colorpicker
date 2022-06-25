@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PercentLocation } from '../bar/draggable.directive';
+
+export type ColorString = string;
 
 @Component({
   selector: 'app-grid',
@@ -7,12 +9,10 @@ import { PercentLocation } from '../bar/draggable.directive';
   styleUrls: ['./grid.component.scss'],
 })
 export class GridComponent {
-  xBackgroundStyle(): string {
-    return `linear-gradient(to right, #ffffff, rgba(0 0 255))`;
-  }
+  @Input() color: ColorString = 'rgba(255 0 0 / 1)';
 
-  yBackgroundStyle(): string {
-    return `linear-gradient(to bottom, rgba(0 0 0 / 0), rgba(0 0 0 / 1))`;
+  xBackgroundStyle(): string {
+    return `linear-gradient(to right, rgba(255 0 0 / 0), ${this.color})`;
   }
 
   markerMoved({ x, y }: PercentLocation) {

@@ -1,8 +1,22 @@
-<div class="bar">
+<div
+  *ngIf="transparent; else nonTransparent"
+  class="bar transparent"
+  [style.background]="backgroundColor()"
+>
   <app-marker
     appDraggable
     (onMove)="markerMoved($event)"
     class="marker"
-    [ngStyle]="markerStyle()"
   ></app-marker>
 </div>
+
+<ng-template #nonTransparent>
+  <div class="bar hue">
+    <app-marker
+      appDraggable
+      (onMove)="markerMoved($event)"
+      class="marker"
+      [ngStyle]="markerStyle()"
+    ></app-marker>
+  </div>
+</ng-template>
