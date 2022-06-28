@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-colorpicker';
-  color = 'rgb(0,0,255)';
+  color = 'rgb(0 0 255)';
   newColor!: string;
 }
