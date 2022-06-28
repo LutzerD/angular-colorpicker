@@ -54,14 +54,6 @@ export class DraggableDirective implements OnDestroy {
 
     const x = mouseEvent.pageX - rect.left;
     const y = mouseEvent.pageY - rect.top;
-    console.group();
-    console.log('Host?', this.hostElement);
-    console.log('rect l,top', rect.left, rect.top);
-    console.log('mouse', mouseEvent.pageX, mouseEvent.pageY);
-    console.log(this.hostElement.closest('.draggableContainer'), rect);
-    console.log('xy:', x, y);
-    console.log('percents:', x / rect.width, y / rect.height);
-    console.groupEnd();
 
     return {
       x: this.clipPercent(x / rect.width),
@@ -71,7 +63,6 @@ export class DraggableDirective implements OnDestroy {
 
   private move(e: MouseEvent) {
     const position: PercentLocation = this.convertMousePosition(e);
-    console.log(position);
     this.onMove.emit(position);
   }
 
