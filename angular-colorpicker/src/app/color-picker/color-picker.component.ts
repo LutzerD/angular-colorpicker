@@ -25,7 +25,7 @@ export class ColorPickerComponent {
   constructor(private ref: ChangeDetectorRef) {}
 
   @Input() set color(value: string) {
-    const [h, s, v] = RGB.fromCSSString(value)!.toHSV();
+    const [h, s, v] = RGB.fromCSString(value)!.toHSV();
     if (this.h == h && this.s == s && this.v == v) {
       return;
     } else {

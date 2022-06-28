@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RGB } from './color';
 
 @Component({
   selector: 'app-root',
@@ -12,5 +13,14 @@ export class AppComponent {
 
   colorChange(color: any) {
     this.color = color;
+  }
+
+  labelColor() {
+    const [h, s, v] = RGB.fromCSString(this.color)!.toHSV();
+    if (v <= 0.5) {
+      return 'white';
+    } else {
+      return 'black';
+    }
   }
 }

@@ -6,8 +6,15 @@ import {
   Output,
   OnDestroy,
 } from '@angular/core';
-import { fromEvent, Subject, Subscription } from 'rxjs';
-import { debounceTime, map, switchMap, takeUntil } from 'rxjs/operators';
+import { fromEvent, merge, of, Subject, Subscription } from 'rxjs';
+import {
+  debounceTime,
+  endWith,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+} from 'rxjs/operators';
 import { OutputEmitter } from '@angular/compiler/src/output/abstract_emitter';
 
 export interface PercentLocation {
@@ -62,14 +69,27 @@ export class DraggableDirective implements OnDestroy {
   }
 
   private move(e: MouseEvent) {
+    console.log('move');
     const position: PercentLocation = this.convertMousePosition(e);
     this.onMove.emit(position);
   }
 
+  //mousedown - trip
+  //switch to mousemove
+  //mouse up - trip
   @Output() onMove = new EventEmitter<PercentLocation>();
   constructor(private el: ElementRef) {
     this.subscription = this.mouseDown
-      .pipe(switchMap((_) => this.mouseMove.pipe(takeUntil(this.mouseUp))))
+      .pipe(
+        switchMap((e: any) => {
+          e.preventDefault();
+          return merge(
+            of(e),
+            this.mouseMove.pipe(takeUntil(this.mouseUp)),
+            this.mouseUp.pipe(take(1))
+          );
+        })
+      )
       .subscribe((val: any) => this.move(val));
   }
 

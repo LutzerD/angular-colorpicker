@@ -75,7 +75,7 @@ export class RGB implements Color {
     return null;
   }
 
-  static fromCSSString(cssColor: string): RGB | null {
+  static fromCSString(cssColor: string): RGB | null {
     const type = this.getType(cssColor);
     if (!type) {
       console.error('Unknown color format:', cssColor);

@@ -4,6 +4,6 @@
       [color]="color"
       (colorChange)="colorChange($event)"
     ></app-color-picker>
-    <h1 class="color-label">{{ color }}</h1>
+    <h1 class="color-label" [style.color]="labelColor()">{{ color }}</h1>
   </div>
 </div>
