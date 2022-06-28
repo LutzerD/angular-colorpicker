@@ -9,4 +9,8 @@ export class AppComponent {
   title = 'angular-colorpicker';
   color = 'rgb(0 0 255)';
   newColor!: string;
+
+  colorChange(color: any) {
+    this.color = color;
+  }
 }

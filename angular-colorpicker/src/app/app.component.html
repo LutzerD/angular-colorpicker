@@ -1,9 +1,9 @@
-<div class="showroom" [style.background-color]="newColor">
+<div class="showroom" [style.background-color]="color">
   <div class="feature">
     <app-color-picker
       [color]="color"
-      (colorChange)="newColor = $event"
+      (colorChange)="colorChange($event)"
     ></app-color-picker>
-    <h1 class="color-label">{{ newColor }}</h1>
+    <h1 class="color-label">{{ color }}</h1>
   </div>
 </div>

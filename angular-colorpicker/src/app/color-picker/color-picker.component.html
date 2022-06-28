@@ -1,5 +1,10 @@
 <div class="color-picker-container">
-  <app-grid (change)="slChanged($event)" [hue]="h"></app-grid>
+  <app-grid
+    (change)="slChanged($event)"
+    [h]="h"
+    [markerX]="s"
+    [markerY]="1 - v"
+  ></app-grid>
   <app-bar (change)="hueChanged($event)" type="hue"></app-bar>
   <app-bar
     (change)="opacityChanged($event)"
