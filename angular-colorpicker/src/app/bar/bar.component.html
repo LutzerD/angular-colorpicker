@@ -5,7 +5,12 @@
   (onMove)="markerMoved($event)"
   [style.background]="transparentBackground()"
 >
-  <app-marker #marker class="marker" [ngStyle]="markerStyle()"></app-marker>
+  <app-marker
+    #marker
+    class="marker"
+    [color]="markerColor"
+    [ngStyle]="markerStyle()"
+  ></app-marker>
 </div>
 
 <ng-template #nonTransparent>
@@ -14,6 +19,11 @@
     appDraggable
     (onMove)="markerMoved($event)"
   >
-    <app-marker #marker class="marker" [ngStyle]="markerStyle()"></app-marker>
+    <app-marker
+      #marker
+      class="marker"
+      [color]="markerColor"
+      [ngStyle]="markerStyle()"
+    ></app-marker>
   </div>
 </ng-template>

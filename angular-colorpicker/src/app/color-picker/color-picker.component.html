@@ -4,11 +4,17 @@
     [h]="h"
     [markerX]="s"
     [markerY]="1 - v"
+    [markerColor]="rgbColor"
   ></app-grid>
-  <app-bar (change)="hueChanged($event)" type="hue"></app-bar>
   <app-bar
+    (change)="hueChanged($event)"
+    [markerColor]="hueMarkerColor()"
+    type="hue"
+  ></app-bar>
+  <app-bar
+    [markerColor]="transparencyMarkerColor()"
     (change)="opacityChanged($event)"
-    [hue]="h"
+    [rgb]="rgbColor"
     type="transparent"
   ></app-bar>
 </div>

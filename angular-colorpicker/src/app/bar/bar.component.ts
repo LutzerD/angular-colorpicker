@@ -25,15 +25,16 @@ export const BarTypes = {
 export class BarComponent {
   constructor(private ref: ChangeDetectorRef) {}
 
+  @Input() markerColor?: string;
   @Output() change = new EventEmitter<number>();
   @Input() type = BarTypes.TRANSPARENT;
   get transparent(): boolean {
     return this.type == BarTypes.TRANSPARENT;
   }
 
-  @Input() hue = 0;
+  @Input() rgb!: string;
   transparentBackground() {
-    return `linear-gradient(to right, transparent, hsl(${this.hue} 100% 50%)),
+    return `linear-gradient(to right, transparent, ${this.rgb}),
     repeating-conic-gradient(#eceaec 0% 25%, white 0% 50%) 50% / 20px 20px`;
   }
   @Output() move = new EventEmitter<PercentLocation>();

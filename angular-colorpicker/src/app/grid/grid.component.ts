@@ -20,6 +20,7 @@ export class GridComponent {
   @Input() h = 0;
   @Input() markerX = 0;
   @Input() markerY = 0;
+  @Input() markerColor?: string;
 
   @Output() change = new EventEmitter<PercentLocation>();
 

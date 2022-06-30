@@ -9,12 +9,12 @@ export class RGB implements Color {
   }
 
   get hasAlpha(): boolean {
-    return this.a != 1 && this.a != 0;
+    return this.a != 1;
   }
 
-  toRGB(): string {
+  toRGB(includeAlpha: boolean = true): string {
     const roundAlpha = (a: number) => Math.round(a * 100) / 100;
-    if (this.hasAlpha) {
+    if (this.hasAlpha && includeAlpha) {
       return `rgba(${this.r} ${this.g} ${this.b} / ${roundAlpha(this.a)})`;
     } else {
       return `rgb(${this.r} ${this.g} ${this.b})`;
@@ -48,7 +48,6 @@ export class RGB implements Color {
 
     try {
       const [_, r, g, b, a] = Array.from(rgbaRegex.exec(cssColor) as string[]);
-      console.log('hello?', r, g, b, a);
       return new RGB(parseInt(r), parseInt(g), parseInt(b), parseFloat(a));
     } catch (error) {
       return null;

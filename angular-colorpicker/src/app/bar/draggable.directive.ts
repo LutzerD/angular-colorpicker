@@ -69,7 +69,6 @@ export class DraggableDirective implements OnDestroy {
   }
 
   private move(e: MouseEvent) {
-    console.log('move');
     const position: PercentLocation = this.convertMousePosition(e);
     this.onMove.emit(position);
   }
