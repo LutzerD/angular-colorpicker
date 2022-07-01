@@ -1,5 +1,5 @@
 <div class="color-picker-container">
   <grid></grid>
-  <hue-bar></hue-bar>
-  <transparency-bar></transparency-bar>
+  <hue-bar [rounded]="!opacity"></hue-bar>
+  <transparency-bar *ngIf="opacity"></transparency-bar>
 </div>

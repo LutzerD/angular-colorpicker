@@ -17,14 +17,12 @@ import { CurrentColorService } from 'src/app/services/current-color.service';
   selector: 'app-color-picker',
   templateUrl: './color-picker.component.html',
   styleUrls: ['./color-picker.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [CurrentColorService],
 })
 export class ColorPickerComponent implements OnDestroy {
-  constructor(
-    private ref: ChangeDetectorRef,
-    private currentColorService: CurrentColorService
-  ) {
+  @Input() opacity: boolean = true;
+
+  constructor(private currentColorService: CurrentColorService) {
     this.subscriptions.push(
       this.currentColorService.color$
         .pipe(filter(({ color }) => color?.toRGB() != this.color))

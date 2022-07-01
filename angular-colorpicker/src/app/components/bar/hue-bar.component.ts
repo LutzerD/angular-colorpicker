@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  Input,
   OnInit,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -20,6 +21,7 @@ export class HueBarComponent implements OnInit {
     private colorService: CurrentColorService
   ) {}
 
+  @Input() rounded = false;
   ngOnInit(): void {
     this.subscriptions.push(
       this.colorService.color$.subscribe(({ h }) => {

@@ -1,18 +1,16 @@
 <div class="showroom" [style.background-color]="color">
   <div class="feature">
-    <app-color-picker
-      [color]="color"
-      (colorChange)="color = $event"
-    ></app-color-picker>
+    <ng-container
+      [ngTemplateOutlet]="pickerTemplate ? pickerTemplate : picker"
+      [ngTemplateOutletContext]="outletContext()"
+    ></ng-container>
     <h1 class="color-label" [style.color]="labelColor()">{{ color }}</h1>
   </div>
 </div>
-<div class="showroom" [style.background-color]="color2">
-  <div class="feature">
-    <app-color-picker
-      [color]="color2"
-      (colorChange)="color2 = $event"
-    ></app-color-picker>
-    <h1 class="color-label" [style.color]="labelColor()">{{ color2 }}</h1>
-  </div>
-</div>
+
+<ng-template #picker let-config>
+  <app-color-picker
+    [color]="config.color"
+    (colorChange)="config.change($event)"
+  ></app-color-picker>
+</ng-template>

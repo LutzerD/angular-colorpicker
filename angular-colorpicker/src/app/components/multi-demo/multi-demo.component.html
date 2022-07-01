@@ -1,4 +1,12 @@
 <div class="container">
   <app-demo></app-demo>
-  <app-demo></app-demo>
+  <app-demo [pickerTemplate]="noOpacityPickerTemplate"></app-demo>
 </div>
+
+<ng-template #noOpacityPickerTemplate let-config>
+  <app-color-picker
+    [opacity]="false"
+    [color]="config.color"
+    (colorChange)="config.change($event)"
+  ></app-color-picker>
+</ng-template>
