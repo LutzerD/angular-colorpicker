@@ -1,13 +1,31 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 @Component({
-  selector: 'app-marker',
+  selector: 'marker',
   templateUrl: './marker.component.html',
   styleUrls: ['./marker.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MarkerComponent implements OnInit {
-  @Input() color?: string;
-  constructor() {}
+export class MarkerComponent {
+  constructor(private ref: ChangeDetectorRef) {}
 
-  ngOnInit(): void {}
+  private _color?: string;
+  @Input()
+  set color(s: string) {
+    this._color = s;
+    if (s != this._color) {
+      this._color = s;
+      this.ref.detectChanges();
+    }
+  }
+
+  get color(): string {
+    return this._color as string;
+  }
 }

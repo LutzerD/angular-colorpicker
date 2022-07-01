@@ -99,12 +99,11 @@ export class RGB implements Color {
     if (s == 0) {
       color.h = h;
     }
-    console.log(s, color.h, h);
     return color;
   }
 
   toHSV(): number[] {
-    return [this.h, this.s, this.v];
+    return [this.h, this.s, this.v, this.a];
   }
 }
 

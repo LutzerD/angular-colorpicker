@@ -8,6 +8,7 @@ import { DraggableDirective } from './directives/draggable.directive';
 import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { HueBarComponent } from './components/bar/hue-bar.component';
 import { TransparencyBarComponent } from './components/bar/transparency-bar.component';
+import { TransparentMarkerPipe } from './pipes/transparent-marker.pipe';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { TransparencyBarComponent } from './components/bar/transparency-bar.comp
     DraggableDirective,
     HueBarComponent,
     TransparencyBarComponent,
+    TransparentMarkerPipe,
   ],
   imports: [BrowserModule],
   providers: [],

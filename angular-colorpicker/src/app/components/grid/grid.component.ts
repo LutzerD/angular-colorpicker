@@ -26,10 +26,10 @@ export class GridComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.colorService.color$.subscribe((color) => {
-      this.h = color.h;
-      this.x = color.s;
-      this.y = 1 - color.v;
+    this.colorService.color$.subscribe(({ h, s, v, color }) => {
+      this.h = h;
+      this.x = s;
+      this.y = 1 - v;
       this.ref.markForCheck();
       this.rgb = color.toRGB(false);
     });

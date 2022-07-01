@@ -1,9 +1,9 @@
 <div class="grid" appDraggable (onMove)="markerMoved($event)">
   <div class="shades-overlay background"></div>
   <div class="background x" [style.background-image]="xBackgroundStyle()"></div>
-  <app-marker
+  <marker
     class="marker"
     [color]="markerColor"
     [ngStyle]="markerStyle()"
-  ></app-marker>
+  ></marker>
 </div>

@@ -18,21 +18,13 @@ import { CurrentColorService } from 'src/app/services/current-color.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorPickerComponent {
-  public h: number = 0;
-  public s = 1;
-  public v = 1;
-  private a = 1;
-
   constructor(
     private ref: ChangeDetectorRef,
     private currentColorService: CurrentColorService
   ) {
     this.currentColorService.color$
-      .pipe(
-        tap((color) => console.log('color', color)),
-        filter((color) => color?.toRGB() != this.color)
-      )
-      .subscribe((color) => {
+      .pipe(filter(({ color }) => color?.toRGB() != this.color))
+      .subscribe(({ color }) => {
         this._color = color;
         this.colorChange.emit(this._color?.toRGB());
       });
@@ -40,20 +32,7 @@ export class ColorPickerComponent {
 
   private _color!: RGB;
   @Input() set color(value: string) {
-    this.currentColorService.set(RGB.fromCSString(value) as RGB);
-    const [h, s, v] = RGB.fromCSString(value)!.toHSV();
-    if (this.h == h && this.s == s && this.v == v) {
-      return;
-    } else {
-      this.h = h;
-      this.s = s;
-      this.v = v;
-      this.ref.detectChanges();
-    }
-  }
-
-  get color(): string {
-    return RGB.fromHSV(this.h, this.s, this.v, this.a).toRGB();
+    this.currentColorService.set(value);
   }
 
   @Output() colorChange = new EventEmitter();

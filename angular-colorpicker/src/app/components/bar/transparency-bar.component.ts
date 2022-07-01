@@ -20,9 +20,8 @@ export class TransparencyBarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.colorService.color$.subscribe((color) => {
-      this.x = color ? color.a : 1;
-      console.log(this.x);
+    this.colorService.color$.subscribe(({ a, color }) => {
+      this.x = a;
       this.rgb = color?.toRGB(false) as string;
       this.rgba = color?.toRGB() as string;
       this.ref.markForCheck();
@@ -35,7 +34,8 @@ export class TransparencyBarComponent implements OnInit {
     return `linear-gradient(to right, transparent, ${this.rgb}),
     repeating-conic-gradient(#eceaec 0% 25%, white 0% 50%) 50% / 20px 20px`;
   }
-  x: number = 0;
+
+  private x: number = 0;
   markerMoved({ x, y }: PercentLocation) {
     this.x = x;
     this.colorService.updateOpacity(this.x);
@@ -44,9 +44,7 @@ export class TransparencyBarComponent implements OnInit {
 
   get markerColor(): string {
     //moving the background in sync would also be cool..
-    const val = `linear-gradient(to right, ${this.rgba}, ${this.rgba}), repeating-conic-gradient(rgb(236, 234, 236) 0%, rgb(236, 234, 236) 25%, white 0%, white 50%) 50% center / 20px 20px`;
-    console.log('too many change detections?');
-    return val;
+    return `linear-gradient(to right, ${this.rgba}, ${this.rgba}), repeating-conic-gradient(rgb(236, 234, 236) 0%, rgb(236, 234, 236) 25%, white 0%, white 50%) 50% center / 20px 20px`;
   }
 
   markerStyle() {
