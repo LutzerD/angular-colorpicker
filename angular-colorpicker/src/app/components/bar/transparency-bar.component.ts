@@ -4,13 +4,13 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { CurrentColorService } from 'src/app/current-color.service';
-import { PercentLocation } from '../draggable.directive';
+import { PercentLocation } from 'src/app/directives/draggable.directive';
+import { CurrentColorService } from 'src/app/services/current-color.service';
 
 @Component({
-  selector: 'app-transparency-bar',
+  selector: 'transparency-bar',
   templateUrl: './transparency-bar.component.html',
-  styleUrls: ['./transparency-bar.component.scss'],
+  styleUrls: ['./bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransparencyBarComponent implements OnInit {

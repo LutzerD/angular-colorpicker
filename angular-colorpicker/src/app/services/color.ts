@@ -1,4 +1,4 @@
-import { Conversions } from './color-picker/conversions';
+import { Conversions } from './conversions';
 
 export type SupportedColorFormat = 'rgb' | 'rgba';
 export class RGB implements Color {

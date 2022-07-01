@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RGB } from './color';
+import { RGB } from './services/color';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +9,6 @@ import { RGB } from './color';
 export class AppComponent {
   title = 'angular-colorpicker';
   color = 'rgb(0 0 255)';
-  newColor!: string;
 
   colorChange(color: any) {
     this.color = color;

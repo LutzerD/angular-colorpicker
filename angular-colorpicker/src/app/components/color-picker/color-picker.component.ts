@@ -8,9 +8,8 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { filter, tap } from 'rxjs/operators';
-import { PercentLocation } from '../bar/draggable.directive';
-import { RGB } from '../color';
-import { CurrentColorService } from '../current-color.service';
+import { RGB } from 'src/app/services/color';
+import { CurrentColorService } from 'src/app/services/current-color.service';
 
 @Component({
   selector: 'app-color-picker',

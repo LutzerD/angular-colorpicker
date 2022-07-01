@@ -1,19 +1,16 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   OnInit,
 } from '@angular/core';
-import { PercentLocation } from '../bar/draggable.directive';
-import { CurrentColorService } from '../current-color.service';
+import { PercentLocation } from '../../directives/draggable.directive';
+import { CurrentColorService } from '../../services/current-color.service';
 
 export type ColorString = string;
 
 @Component({
-  selector: 'app-grid',
+  selector: 'grid',
   templateUrl: './grid.component.html',
   styleUrls: ['./grid.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
