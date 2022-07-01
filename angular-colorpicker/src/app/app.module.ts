@@ -7,6 +7,8 @@ import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { GridComponent } from './grid/grid.component';
 import { BarComponent } from './bar/bar.component';
 import { DraggableDirective } from './bar/draggable.directive';
+import { HueBarComponent } from './bar/hue-bar/hue-bar.component';
+import { TransparencyBarComponent } from './bar/transparency-bar/transparency-bar.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { DraggableDirective } from './bar/draggable.directive';
     GridComponent,
     BarComponent,
     DraggableDirective,
+    HueBarComponent,
+    TransparencyBarComponent,
   ],
   imports: [BrowserModule],
   providers: [],

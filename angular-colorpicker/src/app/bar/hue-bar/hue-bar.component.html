@@ -1,0 +1,7 @@
+<div
+  class="bar hue draggableContainer"
+  appDraggable
+  (onMove)="markerMoved($event)"
+>
+  <app-marker #marker class="marker" [ngStyle]="markerStyle()"></app-marker>
+</div>

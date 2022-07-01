@@ -7,8 +7,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
+import { filter, tap } from 'rxjs/operators';
 import { PercentLocation } from '../bar/draggable.directive';
 import { RGB } from '../color';
+import { CurrentColorService } from '../current-color.service';
 
 @Component({
   selector: 'app-color-picker',
@@ -22,9 +24,24 @@ export class ColorPickerComponent {
   public v = 1;
   private a = 1;
 
-  constructor(private ref: ChangeDetectorRef) {}
+  constructor(
+    private ref: ChangeDetectorRef,
+    private currentColorService: CurrentColorService
+  ) {
+    this.currentColorService.color$
+      .pipe(
+        tap((color) => console.log('color', color)),
+        filter((color) => color?.toRGB() != this.color)
+      )
+      .subscribe((color) => {
+        this._color = color;
+        this.colorChange.emit(this._color?.toRGB());
+      });
+  }
 
+  private _color!: RGB;
   @Input() set color(value: string) {
+    this.currentColorService.set(RGB.fromCSString(value) as RGB);
     const [h, s, v] = RGB.fromCSString(value)!.toHSV();
     if (this.h == h && this.s == s && this.v == v) {
       return;
@@ -76,7 +93,7 @@ export class ColorPickerComponent {
   transparencyMarkerColor(): string {
     //moving the background in sync would also be cool..
     const val = `linear-gradient(to right, ${this.color}, ${this.color}), repeating-conic-gradient(rgb(236, 234, 236) 0%, rgb(236, 234, 236) 25%, white 0%, white 50%) 50% center / 20px 20px`;
-    console.log(val);
+    console.log('too many change detections?');
     return val;
   }
 }

@@ -1,20 +1,5 @@
 <div class="color-picker-container">
-  <app-grid
-    (change)="slChanged($event)"
-    [h]="h"
-    [markerX]="s"
-    [markerY]="1 - v"
-    [markerColor]="rgbColor"
-  ></app-grid>
-  <app-bar
-    (change)="hueChanged($event)"
-    [markerColor]="hueMarkerColor()"
-    type="hue"
-  ></app-bar>
-  <app-bar
-    [markerColor]="transparencyMarkerColor()"
-    (change)="opacityChanged($event)"
-    [rgb]="rgbColor"
-    type="transparent"
-  ></app-bar>
+  <app-grid></app-grid>
+  <app-hue-bar></app-hue-bar>
+  <app-transparency-bar></app-transparency-bar>
 </div>

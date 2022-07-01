@@ -1,0 +1,8 @@
+<div
+  appDraggable
+  class="bar transparent draggableContainer"
+  (onMove)="markerMoved($event)"
+  [style.background]="transparentBackground()"
+>
+  <app-marker #marker class="marker" [ngStyle]="markerStyle()"></app-marker>
+</div>
