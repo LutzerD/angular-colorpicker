@@ -3,23 +3,12 @@
 .bar {
   height: 1rem;
   width: 100%;
-  // background-image: linear-gradient(to right, #ffffff, rgb(0, 0, 255));
-
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-
 .marker {
   position: relative;
-}
-
-.lighter {
-  background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% /
-    20px 20px;
-}
-.transparent {
-  border-radius: 0 0 $color-picker-border-width $color-picker-border-width;
 }
 .hue {
   background: linear-gradient(

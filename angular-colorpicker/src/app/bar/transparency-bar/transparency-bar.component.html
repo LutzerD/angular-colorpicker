@@ -4,5 +4,9 @@
   (onMove)="markerMoved($event)"
   [style.background]="transparentBackground()"
 >
-  <app-marker #marker class="marker" [ngStyle]="markerStyle()"></app-marker>
+  <app-marker
+    class="marker"
+    [color]="markerColor"
+    [ngStyle]="markerStyle()"
+  ></app-marker>
 </div>

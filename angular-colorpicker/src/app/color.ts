@@ -95,7 +95,12 @@ export class RGB implements Color {
 
   static fromHSV(h: number, s: number, v: number, a: number = 1) {
     const [r, g, b] = Conversions.hsvToRgb(h, s, v);
-    return new RGB(r, g, b, a);
+    const color = new RGB(r, g, b, a);
+    if (s == 0) {
+      color.h = h;
+    }
+    console.log(s, color.h, h);
+    return color;
   }
 
   toHSV(): number[] {

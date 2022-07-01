@@ -21,15 +21,26 @@ export class HueBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.colorService.color$.subscribe((color) => {
-      this.x = color ? color.h / 360 : 0;
+      this.hue = color.h;
       this.ref.markForCheck();
     });
   }
 
+  get hue(): number {
+    return this.x * 360;
+  }
+  set hue(hue: number) {
+    this.x = hue / 360;
+  }
+
+  get markerColor(): string {
+    return `hsl(${this.hue},100%,50%)`;
+  }
+
   x: number = 0;
-  markerMoved({ x, y }: PercentLocation) {
+  markerMoved({ x }: PercentLocation) {
     this.x = x;
-    this.colorService.updateHue(this.x * 360);
+    this.colorService.updateHue(this.hue);
     this.ref.markForCheck();
   }
 

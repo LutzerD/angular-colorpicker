@@ -22,9 +22,6 @@ export class GridComponent implements OnInit {
   h = 0;
   x = 0;
   y = 0;
-  @Input() markerColor?: string;
-
-  @Output() change = new EventEmitter<PercentLocation>();
 
   constructor(
     private ref: ChangeDetectorRef,
@@ -37,7 +34,13 @@ export class GridComponent implements OnInit {
       this.x = color.s;
       this.y = 1 - color.v;
       this.ref.markForCheck();
+      this.rgb = color.toRGB(false);
     });
+  }
+
+  rgb!: string;
+  get markerColor(): string {
+    return this.rgb;
   }
 
   xBackgroundStyle(): string {
@@ -47,14 +50,12 @@ export class GridComponent implements OnInit {
   markerMoved({ x, y }: PercentLocation) {
     this.x = x;
     this.y = y;
-    this.change.emit({ x, y });
     this.colorService.updateSaturationValue(x, 1 - y);
     this.ref.detectChanges();
   }
 
   markerStyle() {
     const format = (num: number): string => Math.round(num * 100) + '%';
-
     return {
       left: format(this.x),
       top: format(this.y),
