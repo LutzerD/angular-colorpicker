@@ -4,6 +4,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { PercentLocation } from 'src/app/directives/draggable.directive';
 import { CurrentColorService } from 'src/app/services/current-color.service';
 
@@ -20,11 +21,17 @@ export class HueBarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.colorService.color$.subscribe(({ h }) => {
-      console.log('hue: ', h);
-      this.hue = h;
-      this.ref.markForCheck();
-    });
+    this.subscriptions.push(
+      this.colorService.color$.subscribe(({ h }) => {
+        this.hue = h;
+        this.ref.markForCheck();
+      })
+    );
+  }
+
+  subscriptions: Subscription[] = [];
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   get hue(): number {

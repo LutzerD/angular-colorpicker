@@ -3,7 +3,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   OnInit,
+  OnDestroy,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { PercentLocation } from '../../directives/draggable.directive';
 import { CurrentColorService } from '../../services/current-color.service';
 
@@ -15,7 +17,7 @@ export type ColorString = string;
   styleUrls: ['./grid.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GridComponent implements OnInit {
+export class GridComponent implements OnInit, OnDestroy {
   h = 0;
   x = 0;
   y = 0;
@@ -26,13 +28,20 @@ export class GridComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.colorService.color$.subscribe(({ h, s, v, color }) => {
-      this.h = h;
-      this.x = s;
-      this.y = 1 - v;
-      this.ref.markForCheck();
-      this.rgb = color.toRGB(false);
-    });
+    this.subscriptions.push(
+      this.colorService.color$.subscribe(({ h, s, v, color }) => {
+        this.h = h;
+        this.x = s;
+        this.y = 1 - v;
+        this.ref.markForCheck();
+        this.rgb = color.toRGB(false);
+      })
+    );
+  }
+
+  subscriptions: Subscription[] = [];
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   rgb!: string;

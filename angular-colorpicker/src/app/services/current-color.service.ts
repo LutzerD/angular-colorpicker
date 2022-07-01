@@ -60,7 +60,6 @@ export class CurrentColorService {
       return;
     }
 
-    console.log('setting?');
     const [h, s, v, a] = RGB.fromCSString(cssColor)!.toHSV();
     this.h = h;
     this.s = s;

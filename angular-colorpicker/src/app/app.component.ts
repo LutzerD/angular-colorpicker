@@ -9,13 +9,19 @@ import { RGB } from './services/color';
 export class AppComponent {
   title = 'angular-colorpicker';
   color = 'rgb(0 0 255)';
+  color2 = 'rgb(0 255 0)';
+  showPickers = true;
 
-  colorChange(color: any) {
-    this.color = color;
+  get label1Color() {
+    return this.labelColor(this.color);
   }
 
-  labelColor() {
-    const [h, s, v] = RGB.fromCSString(this.color)!.toHSV();
+  get label2Color() {
+    return this.labelColor(this.color2);
+  }
+
+  labelColor(color: string) {
+    const [h, s, v] = RGB.fromCSString(color)!.toHSV();
     if (v <= 0.5) {
       return 'white';
     } else {

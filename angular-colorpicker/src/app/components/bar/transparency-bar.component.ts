@@ -4,6 +4,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { PercentLocation } from 'src/app/directives/draggable.directive';
 import { CurrentColorService } from 'src/app/services/current-color.service';
 
@@ -20,12 +21,19 @@ export class TransparencyBarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.colorService.color$.subscribe(({ a, color }) => {
-      this.x = a;
-      this.rgb = color?.toRGB(false) as string;
-      this.rgba = color?.toRGB() as string;
-      this.ref.markForCheck();
-    });
+    this.subscriptions.push(
+      this.colorService.color$.subscribe(({ a, color }) => {
+        this.x = a;
+        this.rgb = color?.toRGB(false) as string;
+        this.rgba = color?.toRGB() as string;
+        this.ref.markForCheck();
+      })
+    );
+  }
+
+  subscriptions: Subscription[] = [];
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   rgb!: string;

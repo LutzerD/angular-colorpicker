@@ -6,8 +6,10 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  OnDestroy,
 } from '@angular/core';
-import { filter, tap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { RGB } from 'src/app/services/color';
 import { CurrentColorService } from 'src/app/services/current-color.service';
 
@@ -16,18 +18,26 @@ import { CurrentColorService } from 'src/app/services/current-color.service';
   templateUrl: './color-picker.component.html',
   styleUrls: ['./color-picker.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CurrentColorService],
 })
-export class ColorPickerComponent {
+export class ColorPickerComponent implements OnDestroy {
   constructor(
     private ref: ChangeDetectorRef,
     private currentColorService: CurrentColorService
   ) {
-    this.currentColorService.color$
-      .pipe(filter(({ color }) => color?.toRGB() != this.color))
-      .subscribe(({ color }) => {
-        this._color = color;
-        this.colorChange.emit(this._color?.toRGB());
-      });
+    this.subscriptions.push(
+      this.currentColorService.color$
+        .pipe(filter(({ color }) => color?.toRGB() != this.color))
+        .subscribe(({ color }) => {
+          this._color = color;
+          this.colorChange.emit(this._color?.toRGB());
+        })
+    );
+  }
+
+  subscriptions: Subscription[] = [];
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   private _color!: RGB;

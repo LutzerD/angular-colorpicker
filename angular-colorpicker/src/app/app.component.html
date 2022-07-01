@@ -1,9 +1,20 @@
 <div class="showroom" [style.background-color]="color">
-  <div class="feature">
+  <div class="feature" *ngIf="showPickers">
     <app-color-picker
       [color]="color"
-      (colorChange)="colorChange($event)"
+      (colorChange)="color = $event"
     ></app-color-picker>
-    <h1 class="color-label" [style.color]="labelColor()">{{ color }}</h1>
+    <h1 class="color-label" [style.color]="label1Color">{{ color }}</h1>
   </div>
 </div>
+<div class="showroom" [style.background-color]="color2">
+  <div class="feature" *ngIf="showPickers">
+    <app-color-picker
+      [color]="color2"
+      (colorChange)="color2 = $event"
+    ></app-color-picker>
+    <h1 class="color-label" [style.color]="label2Color">{{ color2 }}</h1>
+  </div>
+</div>
+
+<button (click)="showPickers = !showPickers">toggle</button>
