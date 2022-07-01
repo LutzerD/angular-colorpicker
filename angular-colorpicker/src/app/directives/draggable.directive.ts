@@ -6,16 +6,8 @@ import {
   Output,
   OnDestroy,
 } from '@angular/core';
-import { fromEvent, merge, of, Subject, Subscription } from 'rxjs';
-import {
-  debounceTime,
-  endWith,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-} from 'rxjs/operators';
-import { OutputEmitter } from '@angular/compiler/src/output/abstract_emitter';
+import { merge, of, Subject, Subscription } from 'rxjs';
+import { switchMap, take, takeUntil } from 'rxjs/operators';
 
 export interface PercentLocation {
   x: number;
@@ -59,8 +51,8 @@ export class DraggableDirective implements OnDestroy {
   private convertMousePosition(mouseEvent: MouseEvent): PercentLocation {
     const rect: DOMRect = this.hostElement.getBoundingClientRect();
 
-    const x = mouseEvent.pageX - rect.left;
-    const y = mouseEvent.pageY - rect.top;
+    const x = mouseEvent.pageX - (rect.left + window.scrollX);
+    const y = mouseEvent.pageY - (rect.top + window.scrollY);
 
     return {
       x: this.clipPercent(x / rect.width),
