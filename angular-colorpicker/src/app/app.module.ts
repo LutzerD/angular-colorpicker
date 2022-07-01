@@ -9,6 +9,11 @@ import { ColorPickerComponent } from './components/color-picker/color-picker.com
 import { HueBarComponent } from './components/bar/hue-bar.component';
 import { TransparencyBarComponent } from './components/bar/transparency-bar.component';
 import { TransparentMarkerPipe } from './pipes/transparent-marker.pipe';
+import { AppRoutingModule, routes } from './app-routing.module';
+import { DemoComponent } from './components/demo/demo.component';
+import { MultiDemoComponent } from './components/multi-demo/multi-demo.component';
+import { RouterModule } from '@angular/router';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -20,8 +25,11 @@ import { TransparentMarkerPipe } from './pipes/transparent-marker.pipe';
     HueBarComponent,
     TransparencyBarComponent,
     TransparentMarkerPipe,
+    DemoComponent,
+    MultiDemoComponent,
+    HeaderComponent,
   ],
-  imports: [BrowserModule],
+  imports: [BrowserModule, RouterModule.forRoot(routes)],
   providers: [],
   bootstrap: [AppComponent],
 })

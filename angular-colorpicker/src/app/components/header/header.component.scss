@@ -1,0 +1,10 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  padding: 0.5rem;
+}
+
+.header > a {
+  padding-right: 1rem;
+}
