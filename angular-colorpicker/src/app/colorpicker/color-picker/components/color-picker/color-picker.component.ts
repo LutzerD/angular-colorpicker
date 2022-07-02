@@ -39,6 +39,9 @@ export class ColorPickerComponent implements OnDestroy {
   @Input() set color(value: string) {
     this.currentColorService.set(value);
   }
+  get color(): string {
+    return this._color.toRGB();
+  }
 
   @Output() colorChange = new EventEmitter();
 }
