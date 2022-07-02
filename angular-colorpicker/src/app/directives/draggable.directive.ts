@@ -65,9 +65,6 @@ export class DraggableDirective implements OnDestroy {
     this.onMove.emit(position);
   }
 
-  //mousedown - trip
-  //switch to mousemove
-  //mouse up - trip
   @Output() onMove = new EventEmitter<PercentLocation>();
   constructor(private el: ElementRef) {
     this.subscription = this.mouseDown
