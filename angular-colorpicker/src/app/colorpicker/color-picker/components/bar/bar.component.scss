@@ -1,4 +1,4 @@
-@import "../../variables.scss";
+@import "../../../variables.scss";
 
 .bar {
   height: 1rem;
@@ -9,6 +9,7 @@
 }
 .marker {
   position: relative;
+  transform: translate(-50%, -50%);
 }
 .hue {
   background: linear-gradient(

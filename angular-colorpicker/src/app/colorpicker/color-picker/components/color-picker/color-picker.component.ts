@@ -1,20 +1,17 @@
 import {
   Component,
   Input,
-  OnInit,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
   OnDestroy,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { RGB } from 'src/app/services/color';
-import { CurrentColorService } from 'src/app/services/current-color.service';
+import { RGB } from '../../services/color';
+import { CurrentColorService } from '../../services/current-color.service';
 
 @Component({
-  selector: 'app-color-picker',
+  selector: 'color-picker',
   templateUrl: './color-picker.component.html',
   styleUrls: ['./color-picker.component.scss'],
   providers: [CurrentColorService],

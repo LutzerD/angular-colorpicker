@@ -6,8 +6,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PercentLocation } from 'src/app/directives/draggable.directive';
-import { CurrentColorService } from 'src/app/services/current-color.service';
+import { PercentLocation } from '../../directives/draggable.directive';
+import { CurrentColorService } from '../../services/current-color.service';
 
 @Component({
   selector: 'hue-bar',

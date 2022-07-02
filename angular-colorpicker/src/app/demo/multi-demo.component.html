@@ -4,9 +4,9 @@
 </div>
 
 <ng-template #noOpacityPickerTemplate let-config>
-  <app-color-picker
+  <color-picker
     [opacity]="false"
     [color]="config.color"
     (colorChange)="config.change($event)"
-  ></app-color-picker>
+  ></color-picker>
 </ng-template>

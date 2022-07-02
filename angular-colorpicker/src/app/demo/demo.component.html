@@ -9,8 +9,8 @@
 </div>
 
 <ng-template #picker let-config>
-  <app-color-picker
+  <color-picker
     [color]="config.color"
     (colorChange)="config.change($event)"
-  ></app-color-picker>
+  ></color-picker>
 </ng-template>

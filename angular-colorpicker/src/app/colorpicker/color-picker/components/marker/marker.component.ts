@@ -3,7 +3,6 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  OnInit,
 } from '@angular/core';
 
 @Component({
@@ -24,7 +23,6 @@ export class MarkerComponent {
       this.ref.detectChanges();
     }
   }
-
   get color(): string {
     return this._color as string;
   }

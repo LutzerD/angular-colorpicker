@@ -1,5 +1,5 @@
 import { Component, Input, TemplateRef } from '@angular/core';
-import { RGB } from 'src/app/services/color';
+import { RGB } from '../colorpicker/color-picker/services/color';
 const randomR = () => {
   return Math.floor(Math.random() * 256);
 };
