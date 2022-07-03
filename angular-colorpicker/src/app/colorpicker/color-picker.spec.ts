@@ -1,36 +1,19 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
-import {
-  Component,
-  ElementRef,
-  QueryList,
-  ViewChild,
-  ViewChildren,
-} from '@angular/core';
+import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerModule } from './color-picker.module';
 import { ColorPickerComponent } from './color-picker/components/color-picker/color-picker.component';
-
-const VALID_COLOR_DEFAULT = 'rgb(255 200 0)';
-const VALID_COLOR_1 = 'rgb(255 0 0)';
-const VALID_COLOR_2 = 'rgb(0 255 255)';
-const PICKER_SELECTOR = '.color-picker-container';
-const TRANSPARENCY_BAR_SELECTOR = 'transparency-bar';
+import { SELECTORS, VALID_COLOR } from './test-utils';
 
 describe('ColorPicker', () => {
-  let focusMonitor: FocusMonitor;
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule, ColorPickerModule],
       declarations: [MultiplePickers, Picker],
     });
     TestBed.compileComponents();
-
-    inject([FocusMonitor], (fm: FocusMonitor) => {
-      focusMonitor = fm;
-    })();
   }));
 
   it('Should render a picker', () => {
@@ -44,7 +27,7 @@ describe('ColorPicker', () => {
     fixture.detectChanges();
     const pickerInstance = fixture.componentInstance.picker;
     const getOpacityBars = () =>
-      fixture.debugElement.queryAll(By.css(TRANSPARENCY_BAR_SELECTOR));
+      fixture.debugElement.queryAll(By.css(SELECTORS.TRANSPARENCY_BAR));
 
     pickerInstance.opacity = true;
     fixture.detectChanges();
@@ -61,15 +44,15 @@ describe('ColorPicker', () => {
 
     const pickerInstances = fixture.componentInstance.pickers.toArray();
 
-    pickerInstances[0].color = VALID_COLOR_1;
+    pickerInstances[0].color = VALID_COLOR.RED;
     fixture.detectChanges();
-    expect(pickerInstances[0].color).toBe(VALID_COLOR_1);
-    expect(pickerInstances[1].color).toBe(VALID_COLOR_DEFAULT);
+    expect(pickerInstances[0].color).toBe(VALID_COLOR.RED);
+    expect(pickerInstances[1].color).toBe(VALID_COLOR.DEFAULT);
 
-    pickerInstances[1].color = VALID_COLOR_2;
+    pickerInstances[1].color = VALID_COLOR.TEAL;
     fixture.detectChanges();
-    expect(pickerInstances[0].color).toBe(VALID_COLOR_1);
-    expect(pickerInstances[1].color).toBe(VALID_COLOR_2);
+    expect(pickerInstances[0].color).toBe(VALID_COLOR.RED);
+    expect(pickerInstances[1].color).toBe(VALID_COLOR.TEAL);
   });
 });
 @Component({
@@ -81,7 +64,7 @@ describe('ColorPicker', () => {
 class MultiplePickers {
   @ViewChildren(ColorPickerComponent)
   pickers!: QueryList<ColorPickerComponent>;
-  color: string = VALID_COLOR_DEFAULT;
+  color: string = VALID_COLOR.DEFAULT;
 }
 
 @Component({
@@ -90,6 +73,6 @@ class MultiplePickers {
 class Picker {
   @ViewChild(ColorPickerComponent)
   picker!: ColorPickerComponent;
-  color: string = VALID_COLOR_DEFAULT;
+  color: string = VALID_COLOR.DEFAULT;
   opacity: boolean = true;
 }

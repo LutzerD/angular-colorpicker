@@ -18,7 +18,7 @@ import { CurrentColorService } from '../../services/current-color.service';
 })
 export class ColorPickerComponent implements OnDestroy {
   @Input() opacity: boolean = true;
-
+  static DEFAULT_COLOR = 'rgb(255 200 0)';
   constructor(private currentColorService: CurrentColorService) {
     this.subscriptions.push(
       this.currentColorService.color$
@@ -39,7 +39,9 @@ export class ColorPickerComponent implements OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  private _color: RGB = RGB.fromCSString('rgb(255 200 0)') as RGB;
+  private _color: RGB = RGB.fromCSString(
+    ColorPickerComponent.DEFAULT_COLOR
+  ) as RGB;
   @Input() set color(value: string) {
     this.currentColorService.set(value);
   }
