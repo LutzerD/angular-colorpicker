@@ -43,7 +43,7 @@ export class TransparencyBarComponent implements OnInit {
     repeating-conic-gradient(#eceaec 0% 25%, white 0% 50%) 50% / 20px 20px`;
   }
 
-  private x: number = 0;
+  x: number = 0;
   markerMoved({ x, y }: PercentLocation) {
     this.x = x;
     this.colorService.updateOpacity(this.x);

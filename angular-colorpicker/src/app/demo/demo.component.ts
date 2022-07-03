@@ -1,11 +1,6 @@
 import { Component, Input, TemplateRef } from '@angular/core';
 import { RGB } from '../colorpicker/color-picker/services/color';
-const randomR = () => {
-  return Math.floor(Math.random() * 256);
-};
-const randomRGB = () => {
-  return `rgb(${randomR()} ${randomR()} ${randomR()})`;
-};
+
 @Component({
   selector: 'app-demo',
   templateUrl: './demo.component.html',

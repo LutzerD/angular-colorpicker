@@ -4,13 +4,15 @@ import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerModule } from './color-picker.module';
 import { ColorPickerComponent } from './color-picker/components/color-picker/color-picker.component';
+import { GridComponent } from './color-picker/components/grid/grid.component';
+import { MarkerComponent } from './color-picker/components/marker/marker.component';
 import { SELECTORS, VALID_COLOR } from './test-utils';
 
 describe('ColorPicker', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule, ColorPickerModule],
-      declarations: [MultiplePickers, Picker],
+      declarations: [MultiplePickers, Picker, Marker],
     });
     TestBed.compileComponents();
   }));
@@ -43,17 +45,85 @@ describe('ColorPicker', () => {
 
     const pickerInstances = fixture.componentInstance.pickers.toArray();
 
-    pickerInstances[0].color = VALID_COLOR.RED;
+    pickerInstances[0].color = VALID_COLOR.TEAL;
     fixture.detectChanges();
-    expect(pickerInstances[0].color).toBe(VALID_COLOR.RED);
-    expect(pickerInstances[1].color).toBe(VALID_COLOR.DEFAULT);
+    expect(pickerInstances[0].color).toBe(VALID_COLOR.TEAL);
+    expect(pickerInstances[1].color).toBe(VALID_COLOR.RED);
 
-    pickerInstances[1].color = VALID_COLOR.TEAL;
+    pickerInstances[1].color = VALID_COLOR.GREEN;
     fixture.detectChanges();
-    expect(pickerInstances[0].color).toBe(VALID_COLOR.RED);
-    expect(pickerInstances[1].color).toBe(VALID_COLOR.TEAL);
+    expect(pickerInstances[0].color).toBe(VALID_COLOR.TEAL);
+    expect(pickerInstances[1].color).toBe(VALID_COLOR.GREEN);
+  });
+
+  it('Should update color when grid marker moved', () => {
+    const fixture = TestBed.createComponent(Picker);
+    fixture.detectChanges();
+
+    const grid = fixture.componentInstance.picker.grid;
+
+    grid.markerMoved({ x: 0.3, y: 0.3 });
+    fixture.detectChanges();
+    expect(grid.x).toBeCloseTo(0.3, 5);
+    expect(grid.y).toBeCloseTo(0.3, 5);
+
+    grid.markerMoved({ x: 0.7, y: 0.7 });
+    fixture.detectChanges();
+    expect(grid.x).toBeCloseTo(0.7, 5);
+    expect(grid.y).toBeCloseTo(0.7, 5);
+  });
+
+  it('Should update color when hue marker moved', () => {
+    const fixture = TestBed.createComponent(Picker);
+    fixture.detectChanges();
+
+    const bar = fixture.componentInstance.picker.hueBar;
+    bar.markerMoved({ x: 0.3, y: 0.3 });
+    fixture.detectChanges();
+    expect(bar.x).toBeCloseTo(0.3, 5);
+
+    bar.markerMoved({ x: 0.7, y: 0.7 });
+    fixture.detectChanges();
+    expect(bar.x).toBeCloseTo(0.7, 5);
+  });
+
+  it('Should update color when transparency marker moved', () => {
+    const fixture = TestBed.createComponent(Picker);
+    fixture.detectChanges();
+
+    const bar = fixture.componentInstance.picker.transparencyBar;
+
+    bar.markerMoved({ x: 0.3, y: 0.3 });
+    fixture.detectChanges();
+    expect(bar.x).toBeCloseTo(0.3, 5);
+
+    bar.markerMoved({ x: 0.7, y: 0.7 });
+    fixture.detectChanges();
+    expect(bar.x).toBeCloseTo(0.7, 5);
+  });
+
+  it('Should have correct transparency background', () => {
+    const fixture = TestBed.createComponent(Picker);
+    fixture.detectChanges();
+    const picker = fixture.componentInstance.picker;
+
+    const background = picker.transparencyBar.transparentBackground();
+    expect(background).toContain(VALID_COLOR.RED);
+  });
+
+  it('Should update marker color', () => {
+    const fixture = TestBed.createComponent(Marker);
+    fixture.detectChanges();
+    const marker = fixture.componentInstance.marker;
+
+    marker.color = VALID_COLOR.GREEN;
+    expect(marker.color).toBe(VALID_COLOR.GREEN);
+
+    marker.color = VALID_COLOR.TEAL;
+    expect(marker.color).toBe(VALID_COLOR.TEAL);
   });
 });
+
 @Component({
   template: `<color-picker
     *ngFor="let i of [1, 2, 3]"
@@ -63,7 +133,7 @@ describe('ColorPicker', () => {
 class MultiplePickers {
   @ViewChildren(ColorPickerComponent)
   pickers!: QueryList<ColorPickerComponent>;
-  color: string = VALID_COLOR.DEFAULT;
+  color: string = VALID_COLOR.RED;
 }
 
 @Component({
@@ -72,6 +142,17 @@ class MultiplePickers {
 class Picker {
   @ViewChild(ColorPickerComponent)
   picker!: ColorPickerComponent;
-  color: string = VALID_COLOR.DEFAULT;
+  color: string = VALID_COLOR.RED;
   opacity: boolean = true;
+
+  @ViewChild(GridComponent)
+  grid!: GridComponent;
+}
+
+@Component({
+  template: `<marker></marker>`,
+})
+class Marker {
+  @ViewChild(MarkerComponent)
+  marker!: MarkerComponent;
 }
