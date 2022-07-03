@@ -1,12 +1,11 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { inject, TestBed, waitForAsync } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerModule } from './color-picker.module';
 import { ColorPickerComponent } from './color-picker/components/color-picker/color-picker.component';
 
-const VALID_COLOR_DEFAULT = 'rgb(255 255 0)';
+const VALID_COLOR_DEFAULT = 'rgb(255 200 0)';
 const VALID_COLOR_1 = 'rgb(255 0 0)';
 const VALID_COLOR_2 = 'rgb(0 255 255)';
 
@@ -29,9 +28,6 @@ describe('ColorPicker', () => {
     const fixture = TestBed.createComponent(MultiplePickers);
     fixture.detectChanges();
 
-    // const pickerElements = fixture.debugElement.queryAll(
-    //   By.css('.color-picker-container')
-    // );
     const pickerInstances = fixture.componentInstance.pickers.toArray();
 
     pickerInstances[0].color = VALID_COLOR_1;
@@ -39,14 +35,17 @@ describe('ColorPicker', () => {
     expect(pickerInstances[0].color).toBe(VALID_COLOR_1);
     expect(pickerInstances[1].color).toBe(VALID_COLOR_DEFAULT);
 
-    pickerInstances[0].color = VALID_COLOR_2;
+    pickerInstances[1].color = VALID_COLOR_2;
     fixture.detectChanges();
     expect(pickerInstances[0].color).toBe(VALID_COLOR_1);
     expect(pickerInstances[1].color).toBe(VALID_COLOR_2);
   });
 });
 @Component({
-  template: `<color-picker *ngFor="let i of [1, 2, 3]"></color-picker>`,
+  template: `<color-picker
+    *ngFor="let i of [1, 2, 3]"
+    [color]="color"
+  ></color-picker>`,
 })
 class MultiplePickers {
   @ViewChildren(ColorPickerComponent)

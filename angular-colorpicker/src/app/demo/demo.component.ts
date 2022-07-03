@@ -14,10 +14,8 @@ const randomRGB = () => {
 export class DemoComponent {
   @Input() pickerTemplate?: TemplateRef<any>;
 
-  color = randomRGB();
-  color2 = randomRGB();
+  color = 'rgb(0 255 255)';
 
-  printo = console.log;
   labelColor() {
     const [h, s, v] = RGB.fromCSString(this.color)!.toHSV();
     if (v <= 0.5) {

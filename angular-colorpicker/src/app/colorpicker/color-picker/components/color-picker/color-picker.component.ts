@@ -22,7 +22,12 @@ export class ColorPickerComponent implements OnDestroy {
   constructor(private currentColorService: CurrentColorService) {
     this.subscriptions.push(
       this.currentColorService.color$
-        .pipe(filter(({ color }) => color?.toRGB() != this.color))
+        .pipe(
+          filter(({ color }) => {
+            console.log(color.toRGB(), { ...color });
+            return color?.toRGB() != this.color;
+          })
+        )
         .subscribe(({ color }) => {
           this._color = color;
           this.colorChange.emit(this._color?.toRGB());
@@ -35,12 +40,12 @@ export class ColorPickerComponent implements OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  private _color!: RGB;
+  private _color: RGB = RGB.fromCSString('rgb(255 200 0)') as RGB;
   @Input() set color(value: string) {
     this.currentColorService.set(value);
   }
   get color(): string {
-    return this._color.toRGB();
+    return this._color?.toRGB();
   }
 
   @Output() colorChange = new EventEmitter();
