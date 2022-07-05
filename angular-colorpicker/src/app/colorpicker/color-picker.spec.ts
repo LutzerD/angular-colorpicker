@@ -1,11 +1,12 @@
 import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerModule } from './color-picker.module';
 import { ColorPickerComponent } from './color-picker/components/color-picker/color-picker.component';
 import { GridComponent } from './color-picker/components/grid/grid.component';
 import { MarkerComponent } from './color-picker/components/marker/marker.component';
+import { DraggableDirective } from './color-picker/directives/draggable.directive';
 import { SELECTORS, VALID_COLOR } from './test-utils';
 
 describe('ColorPicker', () => {
@@ -122,6 +123,62 @@ describe('ColorPicker', () => {
     marker.color = VALID_COLOR.TEAL;
     expect(marker.color).toBe(VALID_COLOR.TEAL);
   });
+
+  describe('DraggableDirective', () => {
+    let fixture!: ComponentFixture<Picker>;
+
+    beforeEach(waitForAsync(() => {
+      fixture = TestBed.createComponent(Picker);
+      fixture.detectChanges();
+
+      // draggables: DraggableDirective[] = fixture.debugElement
+      //   .queryAll(By.directive(DraggableDirective))
+      //   .map((d) => d.componentInstance);
+    }));
+
+    it('Should trigger on mouse events', () => {
+      const draggable: DraggableDirective = new DraggableDirective(
+        fixture.elementRef
+      );
+
+      spyOn<any>(draggable, 'move');
+      const e = { pageX: 0, pageY: 0, preventDefault: () => {} } as MouseEvent;
+
+      draggable.subscription.add(() => console.log('again?'));
+      draggable['onMouseDown'](e);
+      expect(draggable['move']).toHaveBeenCalledOnceWith(e);
+
+      draggable['onMouseMove'](e);
+      expect(draggable['move']).toHaveBeenCalledTimes(2);
+
+      draggable['onMouseUp'](e);
+      expect(draggable['move']).toHaveBeenCalledTimes(3);
+    });
+
+    it('Should emit onMove', () => {
+      const draggable: DraggableDirective = new DraggableDirective(
+        fixture.elementRef
+      );
+
+      spyOn<any>(draggable.onMove, 'emit');
+      const e = {
+        pageX: -1,
+        pageY: 10000,
+        preventDefault: () => {},
+      } as MouseEvent;
+
+      draggable['move'](e);
+      expect(draggable.onMove.emit).toHaveBeenCalledOnceWith({ x: 0, y: 1 });
+    });
+
+    it('Should clip percent', () => {
+      const draggable: DraggableDirective = new DraggableDirective(
+        fixture.elementRef
+      );
+
+      expect(draggable['clipPercent'](0.3)).toBe(0.3);
+    });
+  });
 });
 
 @Component({
@@ -137,7 +194,10 @@ class MultiplePickers {
 }
 
 @Component({
-  template: `<color-picker [opacity]="opacity" [color]="color"></color-picker>`,
+  template: `<color-picker
+    [opacity]="opacity"
+    [(color)]="color"
+  ></color-picker>`,
 })
 class Picker {
   @ViewChild(ColorPickerComponent)

@@ -5,6 +5,7 @@ import {
   EventEmitter,
   OnDestroy,
   ViewChild,
+  OnInit,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -21,7 +22,7 @@ import { GridComponent } from '../grid/grid.component';
   styleUrls: ['./color-picker.component.scss'],
   providers: [CurrentColorService],
 })
-export class ColorPickerComponent implements OnDestroy {
+export class ColorPickerComponent implements OnDestroy, OnInit {
   @Input() opacity: boolean = true;
 
   @ViewChild(GridComponent)
@@ -33,7 +34,8 @@ export class ColorPickerComponent implements OnDestroy {
   @ViewChild(TransparencyBarComponent)
   transparencyBar!: TransparencyBarComponent;
 
-  constructor(private currentColorService: CurrentColorService) {
+  constructor(private currentColorService: CurrentColorService) {}
+  ngOnInit(): void {
     this.subscriptions.push(
       this.currentColorService.color$
         .pipe(
@@ -48,7 +50,7 @@ export class ColorPickerComponent implements OnDestroy {
     );
   }
 
-  subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = [];
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
