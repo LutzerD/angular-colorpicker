@@ -1,3 +1,4 @@
+import { query } from '@angular/animations';
 import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -112,16 +113,18 @@ describe('ColorPicker', () => {
     expect(background).toContain(VALID_COLOR.RED);
   });
 
-  it('Should update marker color', () => {
-    const fixture = TestBed.createComponent(Marker);
-    fixture.detectChanges();
-    const marker = fixture.componentInstance.marker;
+  describe('Marker', () => {
+    it('Should set color', () => {
+      const fixture = TestBed.createComponent(Marker);
+      fixture.detectChanges();
+      const marker = fixture.componentInstance.marker;
 
-    marker.color = VALID_COLOR.GREEN;
-    expect(marker.color).toBe(VALID_COLOR.GREEN);
+      marker.color = VALID_COLOR.GREEN;
+      expect(marker.color).toBe(VALID_COLOR.GREEN);
 
-    marker.color = VALID_COLOR.TEAL;
-    expect(marker.color).toBe(VALID_COLOR.TEAL);
+      marker.color = VALID_COLOR.TEAL;
+      expect(marker.color).toBe(VALID_COLOR.TEAL);
+    });
   });
 
   describe('DraggableDirective', () => {

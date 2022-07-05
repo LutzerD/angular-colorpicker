@@ -17,7 +17,6 @@ export class MarkerComponent {
   private _color?: string;
   @Input()
   set color(s: string) {
-    this._color = s;
     if (s != this._color) {
       this._color = s;
       this.ref.detectChanges();
