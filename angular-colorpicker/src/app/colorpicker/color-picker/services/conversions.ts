@@ -73,4 +73,8 @@ export class Conversions {
     }
     return [red, green, blue];
   }
+
+  static rgbToHex(r: number, g: number, b: number) {}
+
+  static hexToRGB(hex: string) {}
 }

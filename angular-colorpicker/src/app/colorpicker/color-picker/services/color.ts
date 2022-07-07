@@ -1,7 +1,7 @@
 import { Conversions } from './conversions';
 
 export type SupportedColorFormat = 'rgb' | 'rgba';
-export class RGB implements Color {
+export class RGB {
   private valueWithinRange(val: number) {
     if (val > 255 || val < 0 || val === null || val === undefined) {
       console.error('Invalid value. Must be between 0 and 255.');
@@ -105,14 +105,17 @@ export class RGB implements Color {
   toHSV(): number[] {
     return [this.h, this.s, this.v, this.a];
   }
-}
 
-export type Color = any;
-// export class HSV implements Color {
-//   toHSV({r,g,b}:{r:number, g:number, b:number}){
-//     const [h,s,v] = Conversions.rgbToHsv(r,g,b);
-//   }
-//   toRGB(){
-//    return Conversions.hsvToRgb(this.h, this.s, this.v);
-//   }
-// }
+  asRGBObject() {
+    return {
+      r: this.r,
+      g: this.g,
+      b: this.b,
+      a: this.a, //TODO: Check if a is null if you set it to rgba then rgb
+    };
+  }
+
+  asHex() {
+    return;
+  }
+}

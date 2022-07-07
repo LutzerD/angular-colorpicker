@@ -16,6 +16,8 @@ import { HueBarComponent } from '../bar/hue-bar.component';
 import { TransparencyBarComponent } from '../bar/transparency-bar.component';
 import { GridComponent } from '../grid/grid.component';
 
+export type PickerType = 'hex' | 'rgba' | 'rgba-object';
+
 @Component({
   selector: 'color-picker',
   templateUrl: './color-picker.component.html',
@@ -24,6 +26,19 @@ import { GridComponent } from '../grid/grid.component';
 })
 export class ColorPickerComponent implements OnDestroy, OnInit {
   @Input() opacity: boolean = true;
+
+  private _type: PickerType = 'rgba';
+  @Input()
+  set type(t: PickerType) {
+    if (!(t == 'hex' || t == 'rgba' || t == 'rgba-object')) {
+      console.error('Unknown type: ' + t);
+    } //TODO: does it still set if the error hits?
+    this._type = t;
+  }
+
+  get type(): PickerType {
+    return this._type;
+  }
 
   @ViewChild(GridComponent)
   grid!: GridComponent;
