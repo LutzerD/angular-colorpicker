@@ -1,3 +1,12 @@
+import { RGBA } from './color';
+
+export interface RGBA_Object {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
 export class Conversions {
   static hsvToRgb(hue: number, saturation: number, value: number) {
     const chroma = value * saturation;
@@ -76,5 +85,25 @@ export class Conversions {
 
   static rgbToHex(r: number, g: number, b: number) {}
 
-  static hexToRGB(hex: string) {}
+  //This will throw system errors if the input isn't valid
+  static hexToRGBA(hexCode: string): RGBA {
+    const hexRegex = /#([0-9a-fA-F]{1,8})/;
+    let [_, code] = hexCode.match(hexRegex) as RegExpMatchArray;
+    while (code.length < 8) code = code + '0';
+    return {
+      r: parseInt(code.substring(0, 2), 16),
+      g: parseInt(code.substring(2, 4), 16),
+      b: parseInt(code.substring(4, 6), 16),
+      a: parseInt(code.substring(6, 8), 16),
+    };
+  }
+
+  static rgbaObjectToHex({ r, g, b, a }: RGBA_Object): string {
+    let hex = '#';
+    hex += (r || 0).toString(16);
+    hex += (g || 0).toString(16);
+    hex += (b || 0).toString(16);
+    hex += (a === undefined || a === null ? 1 : a).toString(16);
+    return hex;
+  }
 }
