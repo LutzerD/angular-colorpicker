@@ -1,5 +1,12 @@
 import { Conversions } from './conversions';
 
+export interface RGBA {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
 export type SupportedColorFormat = 'rgb' | 'rgba';
 export class RGB {
   private valueWithinRange(val: number) {
@@ -117,5 +124,37 @@ export class RGB {
 
   asHex() {
     return;
+  }
+
+  //todo: tests - missing characters from test, incomplete codes, lowercase & uppercase alpha, etc.
+  fromHex(hexCode: string) {
+    try {
+      const rgba = this.hexToRGBA(hexCode);
+      Object.assign(this, rgba);
+    } catch {
+      throw 'No hex code supplied';
+    }
+  }
+
+  //warning - this function will throw errors
+  private hexToRGBA(hexCode: string): RGBA {
+    const hexRegex = /#([0-9a-fA-F]{1,8})/;
+    let [_, code] = hexCode.match(hexRegex) as RegExpMatchArray;
+    while (code.length < 8) code = code + '0';
+    return {
+      r: parseInt(code.substring(0, 2), 16),
+      g: parseInt(code.substring(2, 4), 16),
+      b: parseInt(code.substring(4, 6), 16),
+      a: parseInt(code.substring(6, 8), 16),
+    };
+  }
+
+  rgbaToHex({ r, g, b, a }: RGBA): string {
+    let hex = '#';
+    hex += (r || 0).toString(16);
+    hex += (g || 0).toString(16);
+    hex += (b || 0).toString(16);
+    hex += (a === undefined || a === null ? 1 : a).toString(16);
+    return hex;
   }
 }
