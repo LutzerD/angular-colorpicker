@@ -1,5 +1,5 @@
 import { Component, Input, TemplateRef } from '@angular/core';
-import { RGB } from '../colorpicker/color-picker/services/color';
+import { Color } from '../colorpicker/color-picker/color/color';
 
 @Component({
   selector: 'app-demo',
@@ -12,7 +12,7 @@ export class DemoComponent {
   color = 'rgb(0 255 255)';
 
   labelColor() {
-    const [h, s, v] = RGB.fromCSString(this.color)!.toHSV();
+    const [h, s, v] = new Color(this.color).to('hsv');
     if (v <= 0.5) {
       return 'white';
     } else {

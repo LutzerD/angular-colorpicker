@@ -1,29 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { RGB } from './color';
-
-export interface HSVA {
-  h: number;
-  s: number;
-  v: number;
-  a: number;
-  color: RGB;
-}
+import { Color } from '../color/color';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CurrentColorService {
-  private _color$ = new BehaviorSubject<HSVA | null>(null);
+  private _color$ = new BehaviorSubject<Color | null>(null);
 
   color$ = this._color$
     .asObservable()
-    .pipe(filter((color) => !!color)) as any as Observable<HSVA>;
+    .pipe(filter((color) => !!color)) as any as Observable<Color>; //fixme: filter nulls at base?
 
   latestRGBA: string = '';
   private updated() {
-    const c = RGB.fromHSV(this.h, this.s, this.v, this.a);
+    const c = new Color({ h: this.h, s: this.s, v: this.v, a: this.a });
     this.latestRGBA = c.toRGB();
     this._color$.next({
       h: this.h,
