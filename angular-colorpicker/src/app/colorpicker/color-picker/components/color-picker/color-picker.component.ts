@@ -10,13 +10,12 @@ import {
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { randomRGB } from 'src/app/colorpicker/color-utils';
-import { RGB } from '../../color/color';
 import { CurrentColorService } from '../../services/current-color.service';
 import { HueBarComponent } from '../bar/hue-bar.component';
 import { TransparencyBarComponent } from '../bar/transparency-bar.component';
 import { GridComponent } from '../grid/grid.component';
 
-export type PickerType = 'hex' | 'rgba' | 'rgba-object';
+export type PickerType = 'hex' | 'rgba' | 'rgba_object';
 
 @Component({
   selector: 'color-picker',
@@ -30,8 +29,9 @@ export class ColorPickerComponent implements OnDestroy, OnInit {
   private _type: PickerType = 'rgba';
   @Input()
   set type(t: PickerType) {
-    if (!(t == 'hex' || t == 'rgba' || t == 'rgba-object')) {
+    if (!(t == 'hex' || t == 'rgba' || t == 'rgba_object')) {
       console.error('Unknown type: ' + t);
+      return;
     } //TODO: does it still set if the error hits?
     this._type = t;
   }
@@ -54,13 +54,13 @@ export class ColorPickerComponent implements OnDestroy, OnInit {
     this.subscriptions.push(
       this.currentColorService.color$
         .pipe(
-          filter(({ color }) => {
-            return color?.toRGB() != this.color;
+          filter((color) => {
+            return color.to('rgba') != this.color;
           })
         )
-        .subscribe(({ color }) => {
-          this._color = color;
-          this.colorChange.emit(this._color?.toRGB());
+        .subscribe((color) => {
+          this._color = color.to('rgba');
+          this.colorChange.emit(color.to(this.type));
         })
     );
   }
@@ -70,12 +70,12 @@ export class ColorPickerComponent implements OnDestroy, OnInit {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  private _color: RGB = RGB.fromCSString(randomRGB()) as RGB;
+  private _color: string = randomRGB();
   @Input() set color(value: string) {
     this.currentColorService.set(value);
   }
   get color(): string {
-    return this._color?.toRGB();
+    return this._color;
   }
 
   @Output() colorChange = new EventEmitter();

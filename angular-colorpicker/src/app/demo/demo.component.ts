@@ -12,7 +12,7 @@ export class DemoComponent {
   color = 'rgb(0 255 255)';
 
   labelColor() {
-    const [h, s, v] = new Color(this.color).to('hsv');
+    const { v } = new Color(this.color).to('hsv_object');
     if (v <= 0.5) {
       return 'white';
     } else {

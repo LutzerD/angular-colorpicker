@@ -7,7 +7,7 @@ import { valueWithinRange } from './utils';
 export type PartialColorParser = (colorInput: any) => RGBA_Object | null;
 export type ColorFormatter<T> = (rgba: RGBA_Object) => T;
 export type ParserInputType = 'string' | 'object';
-export type ColorInputType = 'string' | RGBA_Object | RGB_Object | HSVA_Object;
+export type ColorInputType = string | RGBA_Object | RGB_Object | HSVA_Object;
 
 export type ColorFormat =
   | 'rgb'
@@ -92,6 +92,7 @@ export class Color {
   }
 
   to(format: ColorFormat): any {
+    //If I did each  to_x instead of passing in a type, that would let me have output types..
     if (this.invalidInput) {
       console.error('Unable to format invalid input: ', this.invalidInput);
     } else {

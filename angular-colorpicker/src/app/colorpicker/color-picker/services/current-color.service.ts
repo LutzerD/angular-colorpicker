@@ -16,14 +16,8 @@ export class CurrentColorService {
   latestRGBA: string = '';
   private updated() {
     const c = new Color({ h: this.h, s: this.s, v: this.v, a: this.a });
-    this.latestRGBA = c.toRGB();
-    this._color$.next({
-      h: this.h,
-      s: this.s,
-      v: this.v,
-      a: this.a,
-      color: RGB.fromHSV(this.h, this.s, this.v, this.a),
-    });
+    this.latestRGBA = c.to('rgb');
+    this._color$.next(c);
   }
 
   private h: number = 0;
@@ -52,7 +46,7 @@ export class CurrentColorService {
       return;
     }
 
-    const [h, s, v, a] = RGB.fromCSString(cssColor)!.toHSV();
+    const [h, s, v, a] = new Color(cssColor).to('hsv_object');
     this.h = h;
     this.s = s;
     this.v = v;

@@ -29,12 +29,13 @@ export class GridComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.colorService.color$.subscribe(({ h, s, v, color }) => {
+      this.colorService.color$.subscribe((color) => {
+        const { h, s, v } = color.to('hsv_object');
         this.h = h;
         this.x = s;
         this.y = 1 - v;
+        this.rgb = color.to('rgb');
         this.ref.markForCheck();
-        this.rgb = color.toRGB(false);
       })
     );
   }
