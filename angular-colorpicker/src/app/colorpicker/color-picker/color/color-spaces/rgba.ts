@@ -8,6 +8,7 @@ import {
 export function RegisterRGBAColorSpace() {
   registerParser(rgbaFromCSSString, 'string');
   registerFormatter(toRGBAString, 'rgba');
+  registerFormatter(toRGBAObject, 'rgba_object');
 }
 
 export interface RGBA_Object {
@@ -32,7 +33,7 @@ function toRGBAString({ r, g, b, a }: RGBA_Object): string {
     Math.round(a * 10 ** precision) / 10 ** precision;
   return `rgba(${r} ${g} ${b} / ${roundAlpha(a)})`;
 }
-
+const toRGBAObject = (o: RGBA_Object) => o;
 const rgbaFromCSSString: PartialColorParser = (cssColor: string) => {
   try {
     const rgbaRegex: RegExp =

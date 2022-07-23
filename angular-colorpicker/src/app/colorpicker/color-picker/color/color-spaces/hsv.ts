@@ -18,18 +18,23 @@ const hsvToRgb: PartialColorParser = ({
   v,
   a,
 }: HSVA_Object): RGBA_Object | null => {
+  if (h === undefined || s === undefined || v === undefined || a === undefined)
+    return null;
+  console.log('trying', h, s, v, a);
   const hueSection = h / 60;
   const chroma = v * s;
   const secondLargestComponent = chroma * (1 - Math.abs((hueSection % 2) - 1));
   const matchValue = v - chroma;
 
-  return getRgbBySection(
+  const rgba = getRgbBySection(
     hueSection,
     chroma,
     matchValue,
     secondLargestComponent,
     a
   );
+  console.log(rgba);
+  return rgba;
 };
 
 function rgbaToHsv({ r, g, b, a }: RGBA_Object): HSVA_Object {
@@ -105,6 +110,6 @@ function getRgbBySection(
 }
 
 export function RegisterHSVColorSpace() {
-  registerParser(hsvToRgb, 'string');
+  registerParser(hsvToRgb, 'object');
   registerFormatter(rgbaToHsv, 'hsv_object');
 }

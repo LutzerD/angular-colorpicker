@@ -46,7 +46,7 @@ export class CurrentColorService {
       return;
     }
 
-    const [h, s, v, a] = new Color(cssColor).to('hsv_object');
+    const { h, s, v, a } = new Color(cssColor).to('hsv_object');
     this.h = h;
     this.s = s;
     this.v = v;

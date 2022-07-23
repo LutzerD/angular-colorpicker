@@ -3,7 +3,6 @@ import {
   registerFormatter,
   registerParser,
 } from '../color';
-import { valueWithinRange } from '../utils';
 import { RGBA_Object } from './rgba';
 
 export interface RGB_Object {
@@ -33,7 +32,18 @@ function toCSSString({ r, g, b }: RGBA_Object): string {
   return `rgb(${r} ${g} ${b})`;
 }
 
+function fromRGBObject({ r, g, b }: RGB_Object): RGBA_Object | null {
+  if (r === undefined || g === undefined || b === undefined) return null;
+  return {
+    r,
+    g,
+    b,
+    a: 1,
+  };
+}
+
 export function RegisterRGBColorSpace() {
   registerParser(fromCSSString, 'string');
   registerFormatter(toCSSString, 'rgb');
+  registerParser(fromRGBObject, 'object');
 }
