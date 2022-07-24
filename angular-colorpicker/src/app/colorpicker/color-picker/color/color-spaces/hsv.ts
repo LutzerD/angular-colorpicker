@@ -20,7 +20,6 @@ const hsvToRgb: PartialColorParser = ({
 }: HSVA_Object): RGBA_Object | null => {
   if (h === undefined || s === undefined || v === undefined || a === undefined)
     return null;
-  console.log('trying', h, s, v, a);
   const hueSection = h / 60;
   const chroma = v * s;
   const secondLargestComponent = chroma * (1 - Math.abs((hueSection % 2) - 1));
@@ -33,7 +32,6 @@ const hsvToRgb: PartialColorParser = ({
     secondLargestComponent,
     a
   );
-  console.log(rgba);
   return rgba;
 };
 

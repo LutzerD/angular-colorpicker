@@ -28,16 +28,6 @@ const parsers: { [inputType: string]: PartialColorParser[] } = {};
 const formatters: { [type: string]: ColorFormatter<any> } = {};
 
 function validRGBA({ r, g, b, a }: RGBA_Object): boolean {
-  console.log(
-    valueWithinRange(r, 0, 255),
-    valueWithinRange(g, 0, 255),
-    valueWithinRange(b, 0, 255),
-    valueWithinRange(a, 0, 1),
-    r,
-    g,
-    b,
-    a
-  );
   return (
     valueWithinRange(r, 0, 255) &&
     valueWithinRange(g, 0, 255) &&
@@ -77,8 +67,6 @@ export class Color {
   constructor(colorInput: ColorInputType) {
     const type = typeof colorInput;
     const typeParsers = parsers[type];
-    console.log(colorInput, typeof colorInput);
-    console.log(typeParsers);
     if (!typeParsers) {
       console.error('Unable to parse input ', colorInput, ' unknown format.'); //TODO: Does this work if someone makes a wrapper class around e.g. rgba object?
     } else {
@@ -107,7 +95,6 @@ export class Color {
     if (this.invalidInput) {
       console.error('Unable to format invalid input: ', this.invalidInput);
     } else if (!formatters[format]) {
-      console.log('Unsupported format', format);
       return null;
     } else {
       return formatters[format](this.rgba);
