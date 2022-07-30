@@ -1,0 +1,14 @@
+<div class="json-text" style="border-radius: 8px">
+  <ng-container [ngSwitch]="type">
+    <ng-container *ngSwitchCase="'string'">{{ json }}</ng-container>
+    <ng-container *ngSwitchDefault>
+      {{ "{" }}
+      <div *ngFor="let key of keys; let last = last" style="margin-left: 2rem">
+        "{{ key }}":"{{ json[key] }}"
+        <!-- TODO: if the value is a key again could call json-formatter again -->
+        <span *ngIf="!last"> , </span>
+      </div>
+      {{ "}" }}
+    </ng-container>
+  </ng-container>
+</div>

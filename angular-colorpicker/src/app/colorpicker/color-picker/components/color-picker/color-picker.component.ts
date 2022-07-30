@@ -28,16 +28,12 @@ export class ColorPickerComponent implements OnDestroy, OnInit {
 
   private _type: PickerType = 'rgba';
   @Input()
-  set type(t: PickerType) {
+  set format(t: PickerType) {
     if (!(t == 'hex' || t == 'rgba' || t == 'rgba_object')) {
       console.error('Unknown type: ' + t);
       return;
     } //TODO: does it still set if the error hits?
     this._type = t;
-  }
-
-  get type(): PickerType {
-    return this._type;
   }
 
   @ViewChild(GridComponent)
@@ -60,7 +56,7 @@ export class ColorPickerComponent implements OnDestroy, OnInit {
         )
         .subscribe((color) => {
           this._color = color.to('rgba');
-          this.colorChange.emit(color.to(this.type));
+          this.colorChange.emit(color.to(this._type));
         })
     );
   }

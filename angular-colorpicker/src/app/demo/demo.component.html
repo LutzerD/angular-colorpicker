@@ -4,12 +4,24 @@
       [ngTemplateOutlet]="pickerTemplate ? pickerTemplate : picker"
       [ngTemplateOutletContext]="outletContext()"
     ></ng-container>
-    <h1 class="color-label" [style.color]="labelColor()">{{ color }}</h1>
+    <h1 class="color-label" [style.color]="labelColor()">
+      <app-json-formatter [json]="color"></app-json-formatter>
+    </h1>
   </div>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Format</mat-label>
+    <mat-select [(ngModel)]="selectedFormat">
+      <mat-option *ngFor="let format of formats" [value]="format">
+        {{ format }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 
 <ng-template #picker let-config>
   <color-picker
+    [format]="config.format"
     [color]="config.color"
     (colorChange)="config.change($event)"
   ></color-picker>
