@@ -22,7 +22,7 @@ export class TransparencyBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.colorService.color$.subscribe((color) => {
+      this.colorService.color$.subscribe(({color}) => {
         this.rgb = color.to('rgb');
         this.rgba = color.to('rgba');
         const rgba_object = color.to('rgba_object');

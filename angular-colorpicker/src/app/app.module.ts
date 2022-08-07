@@ -12,6 +12,7 @@ import { ColorPickerModule } from './colorpicker/color-picker.module';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { JsonFormatterComponent } from './json-formatter/json-formatter.component';
+
 @NgModule({
   declarations: [
     AppComponent,

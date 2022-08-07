@@ -24,7 +24,7 @@ export class HueBarComponent implements OnInit {
   @Input() rounded = false;
   ngOnInit(): void {
     this.subscriptions.push(
-      this.colorService.color$.subscribe((color) => {
+      this.colorService.color$.subscribe(({color}) => {
         const hsv = color.to('hsv_object');
         this.hue = hsv.h;
         this.ref.markForCheck();

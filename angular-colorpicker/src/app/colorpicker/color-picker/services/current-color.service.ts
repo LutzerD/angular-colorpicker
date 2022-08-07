@@ -3,21 +3,29 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Color } from '../color/color';
 
+export interface ColorChangeEvent {
+    color: Color;
+    updatedExternally: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class CurrentColorService {
-  private _color$ = new BehaviorSubject<Color | null>(null);
+  private _color$ = new BehaviorSubject<ColorChangeEvent | null>(null);
 
   color$ = this._color$
     .asObservable()
-    .pipe(filter((color) => !!color)) as any as Observable<Color>; //fixme: filter nulls at base?
+    .pipe(filter((color) => !!color)) as any as Observable<ColorChangeEvent>; 
 
   latestRGBA: string = '';
-  private updated() {
+  private updated(updatedExternally: boolean = false) {
     const c = new Color({ h: this.h, s: this.s, v: this.v, a: this.a });
     this.latestRGBA = c.to('rgb');
-    this._color$.next(c);
+    this._color$.next({
+      color: c,
+      updatedExternally: updatedExternally,
+    });
   }
 
   private h: number = 0;
@@ -41,7 +49,7 @@ export class CurrentColorService {
     this.updated();
   }
 
-  set(cssColor: string) {
+  set(cssColor: string, updatedExternally: boolean = false) {
     if (cssColor === this.latestRGBA) {
       return;
     }
@@ -52,6 +60,6 @@ export class CurrentColorService {
     this.v = v;
     this.a = a;
 
-    this.updated();
+    this.updated(updatedExternally);
   }
 }

@@ -6,6 +6,8 @@ import {
   OnDestroy,
   ViewChild,
   OnInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -45,18 +47,23 @@ export class ColorPickerComponent implements OnDestroy, OnInit {
   @ViewChild(TransparencyBarComponent)
   transparencyBar!: TransparencyBarComponent;
 
-  constructor(private currentColorService: CurrentColorService) {}
+  constructor(
+    private currentColorService: CurrentColorService,
+    private ref: ChangeDetectorRef,
+    ) {}
   ngOnInit(): void {
     this.subscriptions.push(
       this.currentColorService.color$
         .pipe(
-          filter((color) => {
+          filter(({color}) => {
             return color.to('rgba') != this.color;
           })
         )
-        .subscribe((color) => {
+        .subscribe(({color, updatedExternally}) => {
           this._color = color.to('rgba');
-          this.colorChange.emit(color.to(this._type));
+          if(!updatedExternally){
+            this.colorChange.emit(color.to(this._type));
+          }
         })
     );
   }
@@ -68,7 +75,7 @@ export class ColorPickerComponent implements OnDestroy, OnInit {
 
   private _color: string = randomRGB();
   @Input() set color(value: string) {
-    this.currentColorService.set(value);
+    this.currentColorService.set(value, true);
   }
   get color(): string {
     return this._color;
