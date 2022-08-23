@@ -17,21 +17,51 @@ export interface PercentLocation {
   selector: '[appDraggable]',
 })
 export class DraggableDirective implements OnDestroy {
-  private mouseDown = new Subject<MouseEvent>();
-  @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent) {
-    this.mouseDown.next(event);
+  private selected$ = new Subject<MouseEvent>();
+  @HostListener('mousedown', ['$event']) mouseDown(event: MouseEvent) {
+    this.selected$.next(event);
   }
 
-  private mouseUp = new Subject<MouseEvent>();
-  @HostListener('document:mouseup', ['$event']) onMouseUp(event: MouseEvent) {
-    this.mouseUp.next(event);
+  private deselected$ = new Subject<MouseEvent>();
+  @HostListener('document:mouseup', ['$event']) mouseUp(event: MouseEvent) {
+    this.deselected$.next(event);
   }
 
-  private mouseMove = new Subject<MouseEvent>();
-  @HostListener('document:mousemove', ['$event']) onMouseMove(
+  private move$ = new Subject<MouseEvent>();
+  @HostListener('document:ArrowLeft', ['$event']) mouseMove(
     event: MouseEvent
   ) {
-    this.mouseMove.next(event);
+    this.move$.next(event);
+  }
+
+  private getDirection(event: KeyboardEvent, multiplier = 1): { up?: number, right?: number } | null{
+    console.log(event)
+    return null;
+    if(event.key === 'ArrowLeft'){
+      return {
+        up: 1*multiplier
+      }
+    // }else if(event.key == KEY_CODE.DOWN_ARROW){
+    // }else if(event.keyCode == KEY_CODE.DOWN_ARROW){
+    // }else if(event.keyCode == KEY_CODE.DOWN_ARROW){
+    // }
+    }
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyUpHandler(event: KeyboardEvent) {
+    console.log("up", event);
+  }
+
+  @HostListener('blur', ['$event'])
+  blur(event: KeyboardEvent) {
+    console.log("blur",event);
+  }
+
+  @HostListener('keydown', ['$event'])
+  keyDownHandler(event: KeyboardEvent) {
+    console.log("down", event)
+    // this.getDirection(event);
   }
 
   get hostElement(): HTMLElement {
@@ -67,14 +97,14 @@ export class DraggableDirective implements OnDestroy {
 
   @Output() onMove = new EventEmitter<PercentLocation>();
   constructor(private el: ElementRef) {
-    this.subscription = this.mouseDown
+    this.subscription = this.selected$
       .pipe(
         switchMap((e: any) => {
           e.preventDefault();
           return merge(
             of(e),
-            this.mouseMove.pipe(takeUntil(this.mouseUp)),
-            this.mouseUp.pipe(take(1))
+            this.move$.pipe(takeUntil(this.move$)),
+            this.deselected$.pipe(take(1))
           );
         })
       )
