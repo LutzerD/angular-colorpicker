@@ -5,9 +5,26 @@ import {
   HostListener,
   Output,
   OnDestroy,
+  Input,
+  TemplateRef,
 } from '@angular/core';
-import { merge, of, Subject, Subscription } from 'rxjs';
-import { switchMap, take, takeUntil } from 'rxjs/operators';
+import { merge, of, Subject } from 'rxjs';
+import { take, takeUntil, startWith, tap, filter } from 'rxjs/operators';
+import { MarkerComponent } from '../components/marker/marker.component';
+
+enum KEY_CODE {
+  ArrowDown = 'ArrowDown',
+  ArrowLeft = 'ArrowLeft',
+  ArrowRight = 'ArrowRight',
+  ArrowUp = 'ArrowUp',
+}
+const Velocity = { x: 0.03, y: 0.03 };
+const KeyMap: { [key: string]: PercentLocation } = {
+  ArrowUp: { y: -Velocity.y, x: 0 },
+  ArrowDown: { y: Velocity.y, x: 0 },
+  ArrowLeft: { x: -Velocity.x, y: 0 },
+  ArrowRight: { x: Velocity.x, y: 0 },
+} as any;
 
 export interface PercentLocation {
   x: number;
@@ -16,52 +33,52 @@ export interface PercentLocation {
 @Directive({
   selector: '[appDraggable]',
 })
-export class DraggableDirective implements OnDestroy {
-  private selected$ = new Subject<MouseEvent>();
+export class DraggableDirective {
+  @Input('appDraggable') marker!: MarkerComponent;
+
+  private selected$ = new Subject<PercentLocation>();
   @HostListener('mousedown', ['$event']) mouseDown(event: MouseEvent) {
-    this.selected$.next(event);
+    merge(
+      of(this.convertMousePosition(event)),
+      this.move$.pipe(takeUntil(this.deselected$)),
+      this.deselected$.pipe(take(1))
+    ).subscribe((val: any) => this.move(val));
   }
 
-  private deselected$ = new Subject<MouseEvent>();
+  private deselected$ = new Subject<PercentLocation>();
   @HostListener('document:mouseup', ['$event']) mouseUp(event: MouseEvent) {
-    this.deselected$.next(event);
+    this.deselected$.next(this.convertMousePosition(event));
   }
 
-  private move$ = new Subject<MouseEvent>();
-  @HostListener('document:ArrowLeft', ['$event']) mouseMove(
-    event: MouseEvent
-  ) {
-    this.move$.next(event);
+  private move$ = new Subject<PercentLocation>();
+  @HostListener('document:mousemove', ['$event']) mouseMove(event: MouseEvent) {
+    this.move$.next(this.convertMousePosition(event));
   }
 
-  private getDirection(event: KeyboardEvent, multiplier = 1): { up?: number, right?: number } | null{
-    console.log(event)
-    return null;
-    if(event.key === 'ArrowLeft'){
-      return {
-        up: 1*multiplier
-      }
-    // }else if(event.key == KEY_CODE.DOWN_ARROW){
-    // }else if(event.keyCode == KEY_CODE.DOWN_ARROW){
-    // }else if(event.keyCode == KEY_CODE.DOWN_ARROW){
-    // }
-    }
-  }
+  private keyUp$ = new Subject<KEY_CODE>();
+  private keyDown$ = new Subject<KEY_CODE>();
+  private focusout$ = new Subject<null>();
 
-  @HostListener('window:keyup', ['$event'])
+  listeningToKeys: any = {};
+  @HostListener('keyup', ['$event'])
   keyUpHandler(event: KeyboardEvent) {
-    console.log("up", event);
+    this.keyUp$.next(event.key as KEY_CODE);
   }
 
-  @HostListener('blur', ['$event'])
+  @HostListener('focusout', ['$event'])
   blur(event: KeyboardEvent) {
-    console.log("blur",event);
+    this.focusout$.next();
   }
 
   @HostListener('keydown', ['$event'])
   keyDownHandler(event: KeyboardEvent) {
-    console.log("down", event)
-    // this.getDirection(event);
+    if (KeyMap[event.key]) {
+      if (!this.listeningToKeys[event.key]) {
+        this.watchKey(event.key as KEY_CODE);
+        this.listeningToKeys[event.key] = true;
+      }
+      this.keyDown$.next(event.key as KEY_CODE);
+    }
   }
 
   get hostElement(): HTMLElement {
@@ -78,6 +95,14 @@ export class DraggableDirective implements OnDestroy {
     }
   }
 
+  private convertKey(key: KEY_CODE): PercentLocation {
+    const { x, y } = KeyMap[key];
+    return {
+      x: this.clipPercent(this.latestPosition.x + x),
+      y: this.clipPercent(this.latestPosition.y + y),
+    };
+  }
+
   private convertMousePosition(mouseEvent: MouseEvent): PercentLocation {
     const rect: DOMRect = this.hostElement.getBoundingClientRect();
 
@@ -90,29 +115,33 @@ export class DraggableDirective implements OnDestroy {
     };
   }
 
-  private move(e: MouseEvent) {
-    const position: PercentLocation = this.convertMousePosition(e);
-    this.onMove.emit(position);
+  latestPosition: PercentLocation = { x: 0, y: 0 };
+  private move(e: PercentLocation) {
+    this.latestPosition = e;
+    this.onMove.emit(e);
+  }
+
+  watchKey(code: KEY_CODE) {
+    this.keyDown$
+      .pipe(
+        filter((keycode) => code === keycode),
+        takeUntil(
+          merge(
+            this.keyUp$.pipe(filter((keycode) => code === keycode)),
+            this.focusout$
+          ).pipe(
+            tap((_) => {
+              this.listeningToKeys[code] = false;
+            })
+          )
+        )
+      )
+      .subscribe((key) => {
+        this.listeningToKeys[key] = false;
+        this.move(this.convertKey(key));
+      });
   }
 
   @Output() onMove = new EventEmitter<PercentLocation>();
-  constructor(private el: ElementRef) {
-    this.subscription = this.selected$
-      .pipe(
-        switchMap((e: any) => {
-          e.preventDefault();
-          return merge(
-            of(e),
-            this.move$.pipe(takeUntil(this.move$)),
-            this.deselected$.pipe(take(1))
-          );
-        })
-      )
-      .subscribe((val: any) => this.move(val));
-  }
-
-  subscription: Subscription = Subscription.EMPTY;
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
+  constructor(private el: ElementRef) {}
 }
