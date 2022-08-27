@@ -67,7 +67,7 @@ export class DraggableDirective {
 
   @HostListener('focusout', ['$event'])
   blur(event: KeyboardEvent) {
-    this.focusout$.next();
+    this.focusout$.next(null);
   }
 
   @HostListener('keydown', ['$event'])

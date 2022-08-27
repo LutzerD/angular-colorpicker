@@ -1,10 +1,11 @@
 <div
   class="bar hue draggableContainer"
   [class.rounded]="rounded"
-  appDraggable
+  [appDraggable]="marker"
   (onMove)="markerMoved($event)"
 >
   <marker
+    #marker
     class="marker"
     [color]="markerColor"
     [ngStyle]="markerStyle()"
