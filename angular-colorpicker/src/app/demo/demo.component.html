@@ -6,6 +6,7 @@
     ></ng-container>
     <h1 class="color-label" [style.color]="labelColor()">
       <app-json-formatter [json]="color"></app-json-formatter>
+      <!-- set this so it doesn't feed back in and you'll get less jitter -->
     </h1>
   </div>
 

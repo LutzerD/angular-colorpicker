@@ -6,7 +6,6 @@ import {
   OnDestroy,
   ViewChild,
   OnInit,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -16,6 +15,7 @@ import { CurrentColorService } from '../../services/current-color.service';
 import { HueBarComponent } from '../bar/hue-bar.component';
 import { TransparencyBarComponent } from '../bar/transparency-bar.component';
 import { GridComponent } from '../grid/grid.component';
+import { Color } from '../../color/color';
 
 export type PickerType = 'hex' | 'rgba' | 'rgba_object';
 
@@ -36,6 +36,7 @@ export class ColorPickerComponent implements OnDestroy, OnInit {
       return;
     } //TODO: does it still set if the error hits?
     this._type = t;
+    this.colorChange.emit(new Color(this._color).to(this._type));
   }
 
   @ViewChild(GridComponent)
@@ -49,20 +50,20 @@ export class ColorPickerComponent implements OnDestroy, OnInit {
 
   constructor(
     private currentColorService: CurrentColorService,
-    private ref: ChangeDetectorRef,
-    ) {}
+    private ref: ChangeDetectorRef
+  ) {}
   ngOnInit(): void {
     this.subscriptions.push(
       this.currentColorService.color$
         .pipe(
-          filter(({color}) => {
+          filter(({ color }) => {
             return color.to('rgba') != this.color;
           })
         )
-        .subscribe(({color, updatedExternally}) => {
+        .subscribe(({ color, updatedExternally }) => {
           this._color = color.to('rgba');
-          if(!updatedExternally){
-            this.colorChange.emit(color.to(this._type));
+          if (!updatedExternally) {
+            this.colorChange.emit(new Color(this._color).to(this._type));
           }
         })
     );

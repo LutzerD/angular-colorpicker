@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Color } from '../color/color';
 
 export interface ColorChangeEvent {
-    color: Color;
-    updatedExternally: boolean;
+  color: Color;
+  h: number;
+  s: number;
+  v: number;
+  a: number;
+  updatedExternally: boolean;
 }
 
 @Injectable({
@@ -16,7 +20,7 @@ export class CurrentColorService {
 
   color$ = this._color$
     .asObservable()
-    .pipe(filter((color) => !!color)) as any as Observable<ColorChangeEvent>; 
+    .pipe(filter((color) => !!color)) as any as Observable<ColorChangeEvent>;
 
   latestRGBA: string = '';
   private updated(updatedExternally: boolean = false) {
@@ -24,6 +28,10 @@ export class CurrentColorService {
     this.latestRGBA = c.to('rgb');
     this._color$.next({
       color: c,
+      h: this.h,
+      s: this.s,
+      v: this.v,
+      a: this.a,
       updatedExternally: updatedExternally,
     });
   }
@@ -34,6 +42,7 @@ export class CurrentColorService {
   private a: number = 0;
 
   updateHue(h: number) {
+    console.log('updated hue?');
     this.h = h;
     this.updated();
   }
